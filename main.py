@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
     def setupUi(self):
         #title
         self.setWindowTitle("Report Assistant")
-        self.setGeometry(700, 450, 470, 620)
+        self.setGeometry(400, 250, 470, 620)
         self.setMinimumSize(470, 620)
         self.setMaximumSize(470, 620)
 
