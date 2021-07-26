@@ -3,6 +3,7 @@ import sys
 from modules import *
 
 global _dir
+global flag
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -19,25 +20,42 @@ class MainWindow(QMainWindow):
         self.setMaximumSize(470, 620)
 
 
+        groupBox = QGroupBox('보고서 분류', self)
+        groupBox.setGeometry(10, 5, 450, 40)
+
+        self.radio1 = QRadioButton(self)
+        self.radio1.setText("A. 컨설팅 지원 보고서")
+        self.radio1.setGeometry(20, 20, 150, 20)
+        self.radio1.clicked.connect(self.radioButtonClicked)
+        self.radio2 = QRadioButton(self)
+        self.radio2.setText("B. 제품화 지원 보고서")
+        self.radio2.setGeometry(250, 20, 150, 20)
+        self.radio2.clicked.connect(self.radioButtonClicked)
+
+        self.line_dir = QLineEdit(self)
+        self.line_dir.setGeometry(10, 50, 350, 30)
+        self.line_dir.returnPressed.connect(self.save_directory)
 
         self.btn = QPushButton(self)
-        self.btn.setGeometry(370, 10, 91, 31)
+        self.btn.setGeometry(365, 49, 96, 32)
         self.btn.setText("폴더 열기")
         self.btn.clicked.connect(self.open_folder)
 
+
         self.execute_btn = QPushButton(self)
-        self.execute_btn.setGeometry(10, 50, 451, 61)
+        self.execute_btn.setGeometry(10, 90, 451, 61)
         self.execute_btn.setText("시작")
         self.execute_btn.clicked.connect(self.hwp_sorting)
 
-        self.line_dir = QLineEdit(self)
-        self.line_dir.setGeometry(12, 11, 351, 31)
-        self.line_dir.returnPressed.connect(self.save_directory)
-
         #TextBrowser set
         self.tb = QTextBrowser(self)
-        self.tb.setGeometry(10, 120, 451, 491)
-
+        self.tb.setGeometry(10, 160, 451, 451)
+    def radioButtonClicked(self):
+        global flag
+        if self.radio1.isChecked():
+            flag = 0
+        elif self.radio2.isChecked():
+            flag = 1
     
     def open_folder(self):
         global _dir
@@ -49,9 +67,10 @@ class MainWindow(QMainWindow):
 
     def hwp_sorting(self):
         try:
+
             self.tb.append("==========문서 디렉토리 위치==========")
             self.tb.append(f"Open Directory : {_dir}")
-            hwpframe = HwpMain("0", _dir)
+            hwpframe = HwpMain(flag, _dir)
 
             self.tb.append("==========문서 리스트 읽기==========")
             val = hwpframe.sorting()
@@ -77,7 +96,7 @@ class MainWindow(QMainWindow):
             hwpframe.hwpInsertFile()
 
         except Exception as e:
-            self.tb.append("문서 폴더를 지정해주세요.")
+            self.tb.append("에러 발생!!")
             self.tb.append(e)
         
 

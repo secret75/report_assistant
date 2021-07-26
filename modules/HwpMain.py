@@ -19,7 +19,7 @@ class HwpMain():
         self.summary = ""
 
     def sorting(self):
-        if self.flag == "0":
+        if self.flag == 0:
             #--- 0 : num --- 1 : date --- 2 : product --- 3 : company --- 4 : classification --- 5 : name ---
             for idx, val in enumerate(os.listdir(self.directory)):
                 try:
@@ -39,8 +39,8 @@ class HwpMain():
             self.file_list.insert(0, ["순번", "기업명", "의뢰제품", "지원유형", "완료일자", "담당자"])
 
             return self.file_list
-        elif self.flag == "1":
-            print("123")
+        elif self.flag == 1:
+            print("flag is 1")
 
     def hwpInit(self):
         self.hwp = HwpFunctions(self.directory)
