@@ -89,8 +89,8 @@ class MainWindow(QMainWindow):
             self.tb.append("==========표 그리기==========")
             hwpframe.hwpCreateChart()
 
-            self.tb.append("==========보고서 목차 입력==========")
-            hwpframe.hwpChartFill()
+            # self.tb.append("==========보고서 목차 입력==========")
+            # hwpframe.hwpChartFill()
 
             self.tb.append("==========보고서 내용 복사==========")
             hwpframe.hwpInsertFile()
