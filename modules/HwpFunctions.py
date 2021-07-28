@@ -28,8 +28,9 @@ class HwpFunctions:
 
         act.Execute(pset)
         
-    def CreateChart(self, _Rows, _fileList):
+    def CreateChart(self, _Rows, _fileList, cnt):
         if _Rows > 26:
+            cnt += 1
             row = 26
             self.hwp.HAction.GetDefault("TableCreate", self.hwp.HParameterSet.HTableCreation.HSet)  # 표 생성 시작
             self.hwp.HParameterSet.HTableCreation.Rows = row # 행 갯수
@@ -52,6 +53,7 @@ class HwpFunctions:
             self.hwp.HParameterSet.HTableCreation.TableProperties.Width = self.hwp.MiliToHwpUnit(148)  # 표 너비
             self.hwp.HAction.Execute("TableCreate", self.hwp.HParameterSet.HTableCreation.HSet)  # 위 코드 실행
         else:
+            cnt += 1
             row = _Rows
             self.hwp.HAction.GetDefault("TableCreate", self.hwp.HParameterSet.HTableCreation.HSet)  # 표 생성 시작
             self.hwp.HParameterSet.HTableCreation.Rows = row # 행 갯수
@@ -78,7 +80,7 @@ class HwpFunctions:
             if idx < 26:
                 for j in i:
                     self.SetFont()
-                    if idx == 0:
+                    if cnt < 2 and idx == 0:
                         self.hwp.HAction.GetDefault("CellFill", self.hwp.HParameterSet.HCellBorderFill.HSet)
                         self.hwp.HParameterSet.HCellBorderFill.FillAttr.type = self.hwp.BrushType("NullBrush|WinBrush")
                         self.hwp.HParameterSet.HCellBorderFill.FillAttr.WinBrushFaceColor = self.hwp.RGBColor(160, 190, 224)
@@ -87,6 +89,7 @@ class HwpFunctions:
                         self.hwp.HParameterSet.HCellBorderFill.FillAttr.WindowsBrush = 1
                         self.hwp.HAction.Execute("CellFill",self.hwp.HParameterSet.HCellBorderFill.HSet)
                         self.hwp.Run("CharShapeBold")
+
                     self.hwp.Run("ParagraphShapeAlignCenter")
                     act = self.hwp.CreateAction("InsertText")
                     pset = act.CreateSet()
@@ -96,7 +99,7 @@ class HwpFunctions:
         self.hwp.MovePos(3)
         self.hwp.HAction.Run("BreakPage")
         if _Rows > 27:
-            _fileList = _fileList[27:]
+            _fileList = _fileList[26:]
             self.CreateChart(_Rows-27, _fileList)
 
 
@@ -176,7 +179,13 @@ class HwpFunctions:
         self.hwp.MovePos(3)
         self.hwp.HAction.Run("BreakPage")
 
-    def InsertFile(self, path):
+    def InsertFile(self, path, flag):
+        tmp = ""
+        if flag == 0:
+            tmp = "A"
+        elif flag == 1:
+            tmp = "B"
+            
         file_list = os.listdir(path)
         field_list = []
         for idx, i in enumerate(file_list):
@@ -187,7 +196,7 @@ class HwpFunctions:
             self.hwp.HParameterSet.HInsertFile.KeepParashape = 0
             self.hwp.HParameterSet.HInsertFile.KeepStyle = 0
             self.hwp.HAction.Execute("InsertFile", self.hwp.HParameterSet.HInsertFile.HSet)
-            self.hwp.PutFieldText(f'_Num{{{{{idx}}}}}', f'A{idx+1}')
+            self.hwp.PutFieldText(f'_Num{{{{{idx}}}}}', f'{tmp}{idx+1}')
             self.hwp.MovePos(3)
             self.hwp.HAction.Run("BreakPage")
 

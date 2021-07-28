@@ -73,11 +73,12 @@ class HwpMain():
     def hwpHeadLine(self):
         self.hwp.HeadLine(len(self.file_list)-1, self._sum, self.summary) #헤드라인 문구 작성
     def hwpCreateChart(self):
-        self.hwp.CreateChart(len(self.file_list) + 1, self.file_list)
+        cnt = 0
+        self.hwp.CreateChart(len(self.file_list) + 1, self.file_list, cnt)
     # def hwpChartFill(self):
     #     self.hwp.ChartFill(self.file_list)
     def hwpInsertFile(self):
-        self.hwp.InsertFile(self.directory)
+        self.hwp.InsertFile(self.directory, self.flag)
         # hwp.XHwpWindows.Item(0).Visible = True
 
 if __name__ == "__main__":

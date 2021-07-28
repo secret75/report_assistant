@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
 
     def setupUi(self):
         #title
-        self.setWindowTitle("Report Assistant")
+        self.setWindowTitle("Report Assistant v0.1")
         self.setGeometry(400, 250, 470, 620)
         self.setMinimumSize(470, 620)
         self.setMaximumSize(470, 620)
@@ -66,6 +66,7 @@ class MainWindow(QMainWindow):
         _dir = self.line_dir.text()
 
     def hwp_sorting(self):
+        _dir = self.line_dir.text()
         try:
 
             self.tb.append("==========문서 디렉토리 위치==========")
@@ -103,6 +104,6 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("CI_CLK_R1.png"))
+    app.setWindowIcon(QIcon("clk.ico"))
     win = MainWindow()
     sys.exit(app.exec_())
