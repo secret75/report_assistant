@@ -100,7 +100,7 @@ class HwpFunctions:
         self.hwp.HAction.Run("BreakPage")
         if _Rows > 27:
             _fileList = _fileList[26:]
-            self.CreateChart(_Rows-27, _fileList)
+            self.CreateChart(_Rows-27, _fileList, cnt)
 
 
     def SetFont(self):
