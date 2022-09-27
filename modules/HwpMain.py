@@ -22,21 +22,26 @@ class HwpMain():
     def sorting(self):
         if self.flag == 0:
             #--- 0 : num --- 1 : date --- 2 : product --- 3 : company --- 4 : classification --- 5 : name ---
+            dic = {}
             for idx, val in enumerate(os.listdir(self.directory)):
                 try:
                     self.file_list.append((re.sub("컨설팅 지원 보고서_|\)|.hwp", "", val).replace("(","_")).split("_"))
                     self.file_list[idx].insert(0, f"A{idx+1}")
-                    if self.file_list[idx][4] == "기술 검토":
-                        self.cfc01+=1
-                    elif self.file_list[idx][4] == "설계 및 제작":
-                        self.cfc02+=1
+                    if self.file_list[idx][4] not in dic:
+                        dic[self.file_list[idx][4]] = 1
+                    else:
+                        dic[self.file_list[idx][4]] += 1
                     self.file_list[idx][1] = datetime.strptime(('20' + self.file_list[idx][1]), '%Y%m%d').strftime('%Y-%m-%d')
                     self.file_list[idx][1], self.file_list[idx][3], self.file_list[idx][4] = self.file_list[idx][3], self.file_list[idx][4], self.file_list[idx][1]
                 except Exception as e:
                     print(e)
                     print(val + " - 불필요한 파일입니다.")
                     pass
-            self.summary = f"기술 검토 {self.cfc01}건 / 설계 및 제작 {self.cfc02}건"
+            a = []
+            for i in dic:
+                a.append(f"{i} {dic[i]}건")
+                self._sum += dic[i]
+            self.summary = ' / '.join(a)
             self.file_list.insert(0, ["순번", "기업명", "의뢰제품", "지원유형", "완료일자", "담당자"])
 
             return self.file_list

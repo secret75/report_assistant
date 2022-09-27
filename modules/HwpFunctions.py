@@ -146,13 +146,13 @@ class HwpFunctions:
         char_shape.SetItem("Height", 1200)
         self.hwp.CharShape = char_shape
 
-        pset.SetItem("Text", "1. 제품 제작 컨설징 지원 (A)\r\n")
+        pset.SetItem("Text", "1. 제품 제작 컨설팅 지원 (A)\r\n")
         act.Execute(pset)
 
         char_shape.SetItem("Height", 1000)
         self.hwp.CharShape = char_shape
 
-        pset.SetItem("Text", f"(1) 총 건수 : {TotalCnt}건\r\n")
+        pset.SetItem("Text", f"(1) 총 건수 : {TotalCnt}건 (내부 {TotalCnt}건)\r\n")
         act.Execute(pset)
         pset.SetItem("Text", f"(2) 내부 컨설팅 결과 내역 : {_Sum}건 ({Summary})\r\n")
         act.Execute(pset)
@@ -181,6 +181,7 @@ class HwpFunctions:
 
     def InsertFile(self, path, flag):
         tmp = ""
+        idx = 0
         if flag == 0:
             tmp = "A"
         elif flag == 1:
@@ -196,9 +197,14 @@ class HwpFunctions:
             self.hwp.HParameterSet.HInsertFile.KeepParashape = 0
             self.hwp.HParameterSet.HInsertFile.KeepStyle = 0
             self.hwp.HAction.Execute("InsertFile", self.hwp.HParameterSet.HInsertFile.HSet)
-            self.hwp.PutFieldText(f'_Num{{{{{idx}}}}}', f'{tmp}{idx+1}')
+            # self.hwp.PutFieldText(f'_Num{{{{{idx}}}}}', f'{tmp}{idx+1}')
+            # self.hwp.PutFieldText(f'_Num2{{{{{idx}}}}}', f'{tmp}{idx+1}')
             self.hwp.MovePos(3)
             self.hwp.HAction.Run("BreakPage")
+        idx = [i for i in range(1, len(file_list)+1) for j in range(2)]
+        [self.hwp.PutFieldText(f'_Num{{{{{cnt}}}}}', f'{tmp}{i}')  for cnt, i in enumerate(idx)]
+
+
 
 if __name__ == "__main__":
     app = HwpMainFunction("test address")
