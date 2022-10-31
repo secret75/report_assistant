@@ -2,12 +2,24 @@ import win32com.client as win32
 import os
 
 class HwpFunctions:
-    def __init__(self, directory):
+    def __init__(self, directory, visible):
         self.directory = directory 
 
         self.hwp = win32.gencache.EnsureDispatch("HWPFrame.HwpObject")
-        self.hwp.RegisterModule("FilePathCheckDLL", "SecurityModule")
-        self.hwp.XHwpWindows.Item(0).Visible = True
+        # self.hwp.RegisterModule("FilePathCheckDLL", "SecurityModule")
+        self.hwp.RegisterModule("FilePathCheckDLL", "FilePathCheckerModule")
+        self.hwp.XHwpWindows.Item(0).Visible = visible 
+
+    def getFieldValue(self):
+        fieldValue = []
+        for i in os.listdir(self.directory):
+            self.hwp.Open(self.directory + "/" + i, arg = "versionwarning:False")
+            self.fieldList = self.hwp.GetFieldList().split("\x02")
+            tmp_fieldValue = []
+            for j in self.fieldList:
+                tmp_fieldValue.append(self.hwp.GetFieldText(j))
+            fieldValue.append(tmp_fieldValue)
+        return fieldValue
 
     def PageSetup(self):
 
@@ -197,12 +209,13 @@ class HwpFunctions:
             self.hwp.HParameterSet.HInsertFile.KeepParashape = 0
             self.hwp.HParameterSet.HInsertFile.KeepStyle = 0
             self.hwp.HAction.Execute("InsertFile", self.hwp.HParameterSet.HInsertFile.HSet)
-            # self.hwp.PutFieldText(f'_Num{{{{{idx}}}}}', f'{tmp}{idx+1}')
-            # self.hwp.PutFieldText(f'_Num2{{{{{idx}}}}}', f'{tmp}{idx+1}')
+            self.hwp.PutFieldText(f'_Num{{{{{idx}}}}}', f'{tmp}{idx+1}')
+            self.hwp.PutFieldText(f'_Num2{{{{{idx}}}}}', f'{tmp}{idx+1}')
             self.hwp.MovePos(3)
             self.hwp.HAction.Run("BreakPage")
-        idx = [i for i in range(1, len(file_list)+1) for j in range(2)]
-        [self.hwp.PutFieldText(f'_Num{{{{{cnt}}}}}', f'{tmp}{i}')  for cnt, i in enumerate(idx)]
+    def HwpClear(self):
+        self.hwp.Clear(1)
+        self.hwp.Quit()
 
 
 
