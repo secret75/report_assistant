@@ -28,8 +28,8 @@ class MainWindow(QMainWindow):
         self.radio1.setGeometry(20, 20, 150, 20)
         self.radio1.clicked.connect(self.radioButtonClicked)
         self.radio2 = QRadioButton(self)
-        self.radio2.setText("B. 제품화 지원 보고서")
-        self.radio2.setGeometry(250, 20, 150, 20)
+        self.radio2.setText("B. 시제품 제작 지원 보고서")
+        self.radio2.setGeometry(250, 20, 200, 20)
         self.radio2.clicked.connect(self.radioButtonClicked)
 
         self.line_dir = QLineEdit(self)
@@ -73,13 +73,18 @@ class MainWindow(QMainWindow):
             self.tb.append(f"Open Directory : {_dir}")
             hwpframe = HwpMain(flag, _dir)
 
+            self.tb.append("==========한글 객체 생성==========")
+            hwpframe.hwpInit(False)
+
             self.tb.append("==========문서 리스트 읽기==========")
             val = hwpframe.sorting()
             for i in val:
                 self.tb.append('_'.join(i))
 
+
             self.tb.append("==========한글 객체 생성==========")
-            hwpframe.hwpInit()
+            hwpframe.hwpClear()
+            hwpframe.hwpInit(True)
 
             self.tb.append("==========한글 문서 초기화==========")
             hwpframe.hwpPageSetup()
